@@ -40,6 +40,7 @@
     display:flex;
     align-items:center;
     justify-content:center;
+    min-height:100vh;
     min-height:100dvh;
     padding:18px;
     -webkit-font-smoothing:antialiased;
@@ -49,6 +50,7 @@
   .device{
     width:100%;
     max-width:430px;
+    height:min(860px, calc(100vh - 36px));
     height:min(860px, calc(100dvh - 36px));
     background:var(--surface);
     border-radius:26px;
@@ -351,7 +353,7 @@ const PILLOLA = {
 
   // Link al modulo che registra il completamento (Microsoft/Google Forms).
   // Lascia "" per mostrare la nota dimostrativa; inserisci l'URL reale per attivarlo.
-  formUrl: "https://forms.office.com/Pages/ResponsePage.aspx?id=nKfAklGx30qVCGadGQGBNqO8RbzVt_FGsSDoMb1vS0VUMjlRWktRNDlPRUs5RlJFTk1JOUpCNzlJWS4u"
+  formUrl: ""
 };
 
 /* ============================================================
@@ -489,23 +491,17 @@ function renderResult(){
         ? 'Hai compreso i punti chiave del whistleblowing.'
         : 'Rivedi i passaggi e completa la registrazione: i concetti restano semplici.'}</p>
     </div>
-    <div class="field">
-      <label for="nome">Nome e cognome</label>
-      <input id="nome" type="text" placeholder="Es. Mario Rossi" autocomplete="name">
-    </div>
     <div class="registered" id="reg"></div>
   `);
   footer.innerHTML = `<button class="btn btn-ghost" id="restart">Rivedi</button>
     <button class="btn btn-primary" id="register">Registra completamento</button>`;
   document.getElementById('restart').onclick = ()=>{ pos=0; answers=new Array(tot).fill(null); render(); };
   document.getElementById('register').onclick = ()=>{
-    const nome = (document.getElementById('nome').value || '').trim();
-    if(!nome){ document.getElementById('nome').focus(); return; }
     if(PILLOLA.formUrl){
       window.open(PILLOLA.formUrl, '_blank');
     } else {
       const reg = document.getElementById('reg');
-      reg.innerHTML = `<b>${nome}</b> — completamento pronto per la registrazione.<br>
+      reg.innerHTML = `Completamento pronto per la registrazione.<br>
         <span class="muted">In versione attiva, qui si apre il modulo (Microsoft/Google Forms) che archivia data, nome ed esito come prova formativa.</span>`;
       reg.classList.add('show');
       document.getElementById('register').textContent = 'Registrato ✓';
