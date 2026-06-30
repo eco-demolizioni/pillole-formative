@@ -343,7 +343,7 @@ const PILLOLA = {
       "why": "Il riposo settimanale deve iniziare al più tardi dopo sei periodi di 24 ore."
     }
   ],
-  "formUrl": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=nKfAklGx30qVCGadGQGBNqO8RbzVt_FGsSDoMb1vS0VUNzFLRjNLUjI3RDJTWlEyQkhIOTdJQ0ZIMC4u"
+  "formUrl": "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=nKfAklGx30qVCGadGQGBNqO8RbzVt_FGsSDoMb1vS0VUNzFLRjNLUjI3RDJTWlEyQkhIOTdJQ0ZIMC4u&r3a397c19bbaf482093480bdb1dfd1a3b=%22S%C3%AC%22&r54af8d108e924a3faf70ea7a9f0f479f=XSCOREX"
 };
 
 /* ============================================================
@@ -477,9 +477,7 @@ function renderResult(){
         <span class="scoreval">${score}/${tot}<small>Risposte</small></span>
       </div>
       <h2 style="text-align:center">${ok ? 'Ottimo lavoro' : 'Buon inizio'}</h2>
-      <p class="muted" style="text-align:center">${ok
-        ? 'Hai compreso i punti chiave del whistleblowing.'
-        : 'Rivedi i passaggi e completa la registrazione: i concetti restano semplici.'}</p>
+      <p class="muted" style="text-align:center">Premi qui sotto per registrare il completamento: si aprirà il modulo aziendale già compilato, ti basterà premere <b>Invia</b>.</p>
     </div>
     <div class="registered" id="reg"></div>
   `);
@@ -487,14 +485,18 @@ function renderResult(){
     <button class="btn btn-primary" id="register">Registra completamento</button>`;
   document.getElementById('restart').onclick = ()=>{ pos=0; answers=new Array(tot).fill(null); render(); };
   document.getElementById('register').onclick = ()=>{
+    const reg = document.getElementById('reg');
     if(PILLOLA.formUrl){
-      window.open(PILLOLA.formUrl, '_blank');
-    } else {
-      const reg = document.getElementById('reg');
-      reg.innerHTML = `Completamento pronto per la registrazione.<br>
-        <span class="muted">In versione attiva, qui si apre il modulo (Microsoft/Google Forms) che archivia data, nome ed esito come prova formativa.</span>`;
+      const url = PILLOLA.formUrl.replace('XSCOREX', encodeURIComponent(score + '/' + tot));
+      window.open(url, '_blank');
+      reg.innerHTML = `Si è aperto il modulo di registrazione. Premi <b>Invia</b> per confermare il completamento.`;
       reg.classList.add('show');
-      document.getElementById('register').textContent = 'Registrato ✓';
+      document.getElementById('register').textContent = 'Riapri il modulo';
+    } else {
+      reg.innerHTML = `Completamento pronto per la registrazione.<br>
+        <span class="muted">Configura il link del modulo per attivare la registrazione automatica.</span>`;
+      reg.classList.add('show');
+      document.getElementById('register').textContent = 'Registrato \u2713';
     }
   };
 }
